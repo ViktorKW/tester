@@ -1,0 +1,158 @@
+#include <iostream>
+#include <unistd.h>
+#include <wiringPi.h>
+#include <wiringSerial.h>
+#include <string>
+using namespace std;
+
+
+void print_main_menu()
+{
+    cout<<"\nOptions:\n";
+    cout<<"1. Kill all autorun processes\n";
+    cout<<"2. Reboot system\n";
+    cout<<"3. Execute CLR_CARD\\n\\r command\n";
+    cout<<"4. Execute WR_CARD:[card_id]\\n\\r command\n";
+    cout<<"5. Execute LIST\\n\\r command\n";
+    cout<<"6. Execute GREEN\n";
+    cout<<"\nType number to choose an option\n";
+}
+
+
+/*void finish_task(string result)
+{
+    system("clear");
+    cout<<result;
+}*/
+
+
+int main() 
+{
+    int choice = 0;
+    int serial = serialOpen("/dev/ttyS0",115200);
+    //char buff[] = {0};
+    serialPrintf(serial, "CLR_CARD\n\r");
+    serialPrintf(serial, "WR_CARD:157755732131231\n\r"); 
+    serialPrintf(serial, "WR_CARD:15775573213123\n\r");
+    serialPrintf(serial, "WR_CARD:1577557321312\n\r");  
+    serialPrintf(serial, "WR_CARD:157755732131\n\r");
+    serialPrintf(serial, "WR_CARD:15775573213\n\r");
+    serialPrintf(serial, "WR_CARD:1577557321\n\r");
+    serialPrintf(serial, "WR_CARD:157755732\n\r");
+    serialPrintf(serial, "WR_CARD:15775573\n\r");
+    serialPrintf(serial, "WR_CARD:1577557\n\r");     
+    serialPrintf(serial, "LIST\n\r"); 
+    try
+	{
+		int amount;
+
+		while(serial)
+		{ 
+            serialPrintf(serial, "LIST\n\r"); 
+			amount = serialDataAvail(serial); //listens to serial host till it gets any kind of response
+			printf("\nAmount of bytes: %d\n", amount);
+			if(amount>16)
+			{
+                std::string buff;
+				try
+                {
+                    for(int i = 0; i < amount; i++)
+                    {	 	
+                        buff = buff + (char)serialGetchar(serial);
+                    }
+                }
+                catch(const std::exception& e)
+                {
+                    std::cerr << e.what() << '\n';
+                }
+                cout<<buff;
+			}               
+			usleep(100000);
+		}
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+
+    
+    //system("read");
+    /*while(true)
+    {
+        print_main_menu();
+        cin>>choice;
+
+        switch(choice)
+        {
+            case 1:
+            {
+                try
+                {
+                    system("clear");
+                    cout<<"Executing task...\n";
+                    try
+                    {
+                        system("sudo pkill -o ./main");
+                        system("sudo pkill -o a.out");
+                        system("sudo pkill -o main");
+                        system("sudo pkill -o /main");
+                        system("sudo pkill -o ./a.out");
+                        system("sudo pkill -o cronetab");
+                    }
+                    catch(const std::exception& e)
+                    {
+                        std::cerr << e.what() << '\n';
+                    }
+                }
+                catch(const std::exception& e)
+                {
+                    std::cerr << e.what() << '\n';
+                }
+                break;
+
+            }
+            case 2:
+            {
+                system("clear");
+                cout<<"Rebooting...";
+                sleep(1);
+                system("sudo reboot");
+                break;
+            }
+            case 3:
+            {
+                serialPrintf(serial, "CLR_CARD\n\r");
+                break;
+            }
+            case 4:
+            {
+                system("clear");
+                char buff[]={};
+                cout<<"Enter [card_id]\n";
+                cout<<"WR_CARD:[card_id]\\n\\r\n";
+                cin>>buff;
+                serialPrintf(serial, "WR_CARD:%d\n\r", buff);      
+                cout<<"\nPress any key to continue\n";
+                system("read");        
+                break;
+            }
+            case 5:
+            {
+                system("clear");
+                serialPrintf(serial, "LIST\n\r");
+                cout<<"\nPress any key\n";
+                system("pause");
+                system("read");
+                break;
+            }
+            default:
+            {
+                cout<<"\nNo such option\n";
+                break;
+            }
+        }
+        
+    }*/
+    //print_main_menu();
+    return 0;
+}
