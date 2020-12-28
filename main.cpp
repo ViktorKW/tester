@@ -77,14 +77,14 @@ void working_with_uart(string serial_address)
     serialClose(serial);
     working_with_uart(serial_address);
 }
-int choice;
+ 
 int main() 
 {
     while(true)
     {
         system("clear");
         print_main_menu();
-        choice = 0;
+        int choice;
         cin>>choice;
 
         if(choice==1)
@@ -146,6 +146,10 @@ int main()
         else
         {
             cout<<"\nNo such option"<<endl;
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            sleep(1);
+            
         }
     }
     return 0;
