@@ -28,6 +28,7 @@ void working_with_uart(string serial_address)
     if(command.find("GREEN") != std::string::npos||command.find("RED") != std::string::npos)
     {
        serialPrintf(serial, "%s\n\r", command.c_str());
+       sleep(1);
        cout<<"commands GREEN and RED won't return anything\n"<<endl;
     }
     else if(command.find("exit")!=std::string::npos)
@@ -40,6 +41,7 @@ void working_with_uart(string serial_address)
         while (!amount)
         {
             serialPrintf(serial, "%s\n\r", command.c_str());
+            sleep(1);
             amount = serialDataAvail(serial); 
             while(amount < 5)
             {
@@ -49,6 +51,7 @@ void working_with_uart(string serial_address)
                     {
                         requests = 0;
                         serialPrintf(serial, "%s\n\r", command.c_str());
+                        sleep(1);
                         amount = serialDataAvail(serial);
                     }
                 usleep(100000);
