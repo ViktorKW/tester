@@ -15,7 +15,8 @@ void print_main_menu()
 {
     cout<<"\nOptions:"<<endl;
     cout<<"1. Kill all autorun processes"<<endl;
-    cout<<"2. Execute custom commnad"<<endl;
+    cout<<"2. Execute custom command"<<endl;
+    cout<<"3. Exit"<<endl;
     cout<<"\nType number to choose an option"<<endl;
 }
 
@@ -43,7 +44,7 @@ void working_with_uart(string serial_address)
             serialPrintf(serial, "%s\n\r", command.c_str());
             sleep(1);
             amount = serialDataAvail(serial); 
-            while(amount < 5)
+            while(amount < 5&&requests<5)
             {
                 requests++;
                 amount = serialDataAvail(serial);
@@ -100,8 +101,8 @@ int main()
                     system("sudo pkill -o main");
                     system("sudo pkill -o /main");
                     system("sudo pkill -o ./a.out");
-                    system("sudo pkill -o cronetab");
-                    system("sudo pkill -o cron");
+                    /*system("sudo pkill -o cronetab");
+                    system("sudo pkill -o cron");*/
                     cout<<"Task was executed successfully"<<endl;
                     system("read -p '\n\nPress enter to continue' var");
                 }
@@ -143,13 +144,15 @@ int main()
             }
            
         }
+        else if(choice == 3)
+        {
+            return 0;
+        }
         else
         {
             cout<<"\nNo such option"<<endl;
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            sleep(1);
-            
         }
     }
     return 0;
